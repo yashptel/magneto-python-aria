@@ -23,7 +23,8 @@ if os.path.exists('log.txt'):
         f.truncate(0)
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    handlers=[logging.FileHandler('log.txt'), logging.StreamHandler()],
+                    handlers=[logging.FileHandler(
+                        'log.txt'), logging.StreamHandler()],
                     level=logging.INFO)
 
 load_dotenv('config.env')
@@ -82,12 +83,15 @@ except:
 try:
     BOT_TOKEN = getConfig('BOT_TOKEN')
     parent_id = getConfig('GDRIVE_FOLDER_ID')
+    backup_parent_id = getConfig('GDRIVE_BACKUP_FOLDER_ID').split()
     DOWNLOAD_DIR = getConfig('DOWNLOAD_DIR')
     if not DOWNLOAD_DIR.endswith("/"):
         DOWNLOAD_DIR = DOWNLOAD_DIR + '/'
-    DOWNLOAD_STATUS_UPDATE_INTERVAL = int(getConfig('DOWNLOAD_STATUS_UPDATE_INTERVAL'))
+    DOWNLOAD_STATUS_UPDATE_INTERVAL = int(
+        getConfig('DOWNLOAD_STATUS_UPDATE_INTERVAL'))
     OWNER_ID = int(getConfig('OWNER_ID'))
-    AUTO_DELETE_MESSAGE_DURATION = int(getConfig('AUTO_DELETE_MESSAGE_DURATION'))
+    AUTO_DELETE_MESSAGE_DURATION = int(
+        getConfig('AUTO_DELETE_MESSAGE_DURATION'))
     TELEGRAM_API = getConfig('TELEGRAM_API')
     TELEGRAM_HASH = getConfig('TELEGRAM_HASH')
 except KeyError as e:
@@ -95,9 +99,10 @@ except KeyError as e:
     exit(1)
 
 LOGGER.info("Generating USER_SESSION_STRING")
-app = Client(':memory:', api_id=int(TELEGRAM_API), api_hash=TELEGRAM_HASH, bot_token=BOT_TOKEN)
+app = Client(':memory:', api_id=int(TELEGRAM_API),
+             api_hash=TELEGRAM_HASH, bot_token=BOT_TOKEN)
 
-#Generate Telegraph Token
+# Generate Telegraph Token
 sname = ''.join(random.SystemRandom().choices(string.ascii_letters, k=8))
 LOGGER.info("Generating Telegraph Token using '" + sname + "' name")
 telegraph = Telegraph()
